@@ -1,4 +1,4 @@
-#### 使用套件請查看 requirements.txt
+### 使用套件請查看 requirements.txt
 
 若要安裝請使用
 
@@ -6,7 +6,7 @@
 pip install -r requirements.txt
 ```
 
-#### 簡單測試方法
+### 簡單測試方法
 
 修改 `src/main.py`，main 函數中的 user_inputs 參數，
 
@@ -26,3 +26,26 @@ python src/main.py
 - chosen_winning_numbers: 選擇獎號
   - 威力彩範例 `[[1, 2, 3, 4, 5, 6], [1]]` (index 0 為選號，index 1 為特別號)
   - 其他玩法範例 `[[1, 2, 3, 4, 5, 6]]`
+
+### 專案結構說明
+
+```
+├── README.md # 說明文件
+├── requirements.txt # 定義使用套件及版本
+├── src
+│   ├── errors # 錯誤類別
+│   │   ├── base_error.py # 基礎錯誤類別
+│   │   ├── draw_date_error.py # 開獎日期錯誤類別
+│   │   ├── lottery_type_error.py # 彩券類型錯誤類別
+│   │   ├── winning_numbers_length_error.py # 選號數量錯誤類別
+│   │   ├── winning_number_range_error.py # 選號範圍錯誤類別
+│   ├── modules # 彩券類別
+│   │   ├── lottery.py # 彩券抽象類別
+│   │   ├── lottery_type.py # 彩券種類列舉類別
+│   │   ├── lottery_names.py # 彩券種類名稱對應函數
+│   │   ├── lottery_factory.py # 彩券工廠函數
+│   │   ├── big_lotto.py # 大樂透實作類別
+│   │   ├── daily_lotto.py # 今彩實作類別
+│   │   ├── power_lotto.py # 威力彩實作類別
+│   ├── main.py # 主程式 (流程控制)
+```
