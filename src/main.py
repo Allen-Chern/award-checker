@@ -1,0 +1,132 @@
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import List
+
+from errors.draw_date_error import DrawDateError
+from errors.lottery_type_error import LotteryTypeError
+from errors.winning_number_range_error import WinningNumberRangeError
+from errors.winning_numbers_length_error import WinningNumbersLengthError
+from modules.lottery_factory import lottery_factory
+from modules.lottery_type import LotteryType
+
+
+@dataclass
+class UserInputs:
+    lottery_type: LotteryType
+    draw_date: datetime
+    chosen_winning_numbers: List[List[int]]
+
+
+def get_user_inputs() -> UserInputs:
+    # 取得使用者輸入的彩券類型
+    lottery_type = None
+    is_valid = False
+    while not is_valid:
+        lottery_type_str = input("請輸入彩券類型:")
+        try:
+            lottery_type = LotteryType.from_string(lottery_type_str)
+            is_valid = True
+        except LotteryTypeError as error:
+            print(error)
+
+    # 取得使用者輸入的開獎日期
+    draw_date = None
+    current_date = datetime.now()
+    month_ago_date = current_date - timedelta(days=30)
+    is_valid = False
+    while not is_valid:
+        draw_date_str = input("請輸入開獎日期:")
+        try:
+            draw_date = datetime.strptime(draw_date_str, "%Y-%m-%d")
+            if month_ago_date <= draw_date <= current_date:
+                is_valid = True
+            else:
+                print("目前僅供查詢近 30 天的開獎日期")
+        except ValueError as error:
+            print("請輸入正確的日期格式")
+
+    # 取得使用者輸入的號碼
+    chosen_winning_numbers: List[List[int]] = []
+    has_second_zone = lottery_type == LotteryType.POWER_LOTTO
+    is_valid = False
+    while not is_valid:
+        zone_name = "第一區" if has_second_zone else ""
+        chosen_zone_numbers_str = input(f"請以逗號分隔輸入{zone_name}獎號:")
+        try:
+            chosen_zone_numbers = [
+                int(number) for number in chosen_zone_numbers_str.split(",")
+            ]
+            duplicate_numbers = get_duplicate_numbers(chosen_zone_numbers)
+            if not duplicate_numbers:
+                chosen_winning_numbers.append(chosen_zone_numbers)
+                is_valid = True
+            else:
+                print(f"輸入的號碼重複: {duplicate_numbers}")
+        except ValueError as error:
+            print("請輸入正確的號碼格式")
+
+    is_valid = False
+    while not is_valid:
+        chosen_zone_numbers_str = input("請輸入第二區獎號:")
+        try:
+            chosen_zone_numbers = [
+                int(number) for number in chosen_zone_numbers_str.split(",")
+            ]
+            chosen_winning_numbers.append(chosen_zone_numbers)
+            is_valid = True
+        except ValueError as error:
+            print("請輸入正確的號碼格式")
+
+    return UserInputs(
+        lottery_type=lottery_type,
+        draw_date=draw_date,
+        chosen_winning_numbers=chosen_winning_numbers,
+    )
+
+
+def get_duplicate_numbers(chosen_winning_numbers: List[int]) -> List[int]:
+    seen = set()
+    duplicates = set()
+
+    for number in chosen_winning_numbers:
+        if number in seen:
+            duplicates.add(number)
+        else:
+            seen.add(number)
+
+    return list(duplicates)
+
+
+def main():
+    # user_inputs = get_user_inputs()
+    user_inputs = UserInputs(
+        lottery_type=LotteryType.BIG_LOTTO,
+        draw_date=datetime.strptime("2024-09-30", "%Y-%m-%d"),
+        chosen_winning_numbers=[[1, 2, 3, 4, 5, 6]],
+    )
+    lottery = lottery_factory(user_inputs.lottery_type)
+
+    try:
+        lottery.validate_winning_numbers(user_inputs.chosen_winning_numbers)
+    except WinningNumbersLengthError as error:
+        print(error)
+        return
+    except WinningNumberRangeError as error:
+        print(error)
+        return
+
+    try:
+        prize_result = lottery.check_prize_eligibility(
+            user_inputs.draw_date, user_inputs.chosen_winning_numbers
+        )
+
+        if prize_result.amount > 0:
+            print(f"恭喜您中了{prize_result.prize_name}, 獎金為{prize_result.amount}元")
+        else:
+            print("很抱歉, 您未中獎")
+    except DrawDateError as error:
+        print(error)
+        return
+
+
+main()
