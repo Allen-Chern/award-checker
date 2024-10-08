@@ -47,5 +47,7 @@ python src/main.py
 │   │   ├── big_lotto.py # 大樂透實作類別
 │   │   ├── daily_lotto.py # 今彩實作類別
 │   │   ├── power_lotto.py # 威力彩實作類別
+│   ├── utils # 工具類別
+│   │   ├── html.py # 取得渲染後的網頁 HTML 函數
 │   ├── main.py # 主程式 (流程控制)
 ```
