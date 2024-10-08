@@ -36,6 +36,7 @@ python src/main.py
 │   ├── errors # 錯誤類別
 │   │   ├── base_error.py # 基礎錯誤類別
 │   │   ├── draw_date_error.py # 開獎日期錯誤類別
+│   │   ├── fetch_html_timeout_error.py # 頁面加載失敗錯誤類別
 │   │   ├── lottery_type_error.py # 彩券類型錯誤類別
 │   │   ├── winning_numbers_length_error.py # 選號數量錯誤類別
 │   │   ├── winning_number_range_error.py # 選號範圍錯誤類別
@@ -47,7 +48,10 @@ python src/main.py
 │   │   ├── big_lotto.py # 大樂透實作類別
 │   │   ├── daily_lotto.py # 今彩實作類別
 │   │   ├── power_lotto.py # 威力彩實作類別
+│   │   ├── thirty_nine_lotto.py # 39 樂合彩實作類別
 │   ├── utils # 工具類別
+│   │   ├── date.py # 西元日期轉換民國日期函數
 │   │   ├── html.py # 取得渲染後的網頁 HTML 函數
+│   │   ├── str.py # 金額字串格式化函數
 │   ├── main.py # 主程式 (流程控制)
 ```

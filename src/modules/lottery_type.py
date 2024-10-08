@@ -8,6 +8,7 @@ class LotteryType(Enum):
     BIG_LOTTO = 1
     POWER_LOTTO = 2
     DAILY_LOTTO = 3
+    THIRTY_NINE_LOTTO = 4
 
     @staticmethod
     def from_string(lottery_type_str: str) -> "LotteryType":

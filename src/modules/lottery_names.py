@@ -4,7 +4,8 @@ from modules.lottery_type import LotteryType
 lottery_names = {
     LotteryType.BIG_LOTTO: "大樂透",
     LotteryType.POWER_LOTTO: "威力彩",
-    LotteryType.DAILY_LOTTO: "今彩",
+    LotteryType.DAILY_LOTTO: "今彩539",
+    LotteryType.THIRTY_NINE_LOTTO: "39樂合彩",
 }
 
 
