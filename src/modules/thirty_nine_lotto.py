@@ -75,6 +75,8 @@ class ThirtyNineLotto(Lottery):
                         case 4:
                             amount = self.get_amount(prize_infos[0])
                             return PrizeResult(title="四合", amount=amount)
+                else:
+                    return PrizeResult(title="未中獎", amount=0)
 
         # 如果沒有找到對應的 result-item，則拋出 DrawDateError
         raise DrawDateError(draw_date=draw_date)
